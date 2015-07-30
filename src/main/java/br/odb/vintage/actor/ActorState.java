@@ -1,4 +1,4 @@
-package br.odb.vintage;
+package br.odb.vintage.actor;
 
 public class ActorState {
 

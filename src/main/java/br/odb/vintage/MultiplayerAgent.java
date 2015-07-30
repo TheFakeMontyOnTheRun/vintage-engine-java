@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import br.odb.utils.math.Vec3;
+import br.odb.vintage.actor.ActorSceneNode;
 
 /**
  * Created by monty on 7/28/15.
@@ -23,8 +24,8 @@ public class MultiplayerAgent implements Runnable {
 	
 	volatile int gameId;
 	volatile int playerId;
-	SceneActorNode playerNode;
-	List< SceneActorNode > actors = new ArrayList<>();
+	ActorSceneNode playerNode;
+	List< ActorSceneNode > actors = new ArrayList<>();
 
 	void sendPosition(int id) throws IOException {
 
@@ -41,7 +42,7 @@ public class MultiplayerAgent implements Runnable {
 
 		String[] coords;
 
-		SceneActorNode node;
+		ActorSceneNode node;
 		Vec3 v = new Vec3();
 		
 		synchronized (actors) {
@@ -51,7 +52,7 @@ public class MultiplayerAgent implements Runnable {
 			for (String pos : positions) {
 				coords = pos.split("[ ]+");
 				
-				node = new SceneActorNode( pos.toString() );
+				node = new ActorSceneNode( pos.toString() );
 				
 
 				v.x = Float.parseFloat(coords[0]);

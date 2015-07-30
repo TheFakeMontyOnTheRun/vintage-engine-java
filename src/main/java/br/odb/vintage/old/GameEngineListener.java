@@ -1,6 +1,7 @@
-package br.odb.vintage;
+package br.odb.vintage.old;
 
 import br.odb.utils.FileServerDelegate;
+import br.odb.vintage.actor.ActorSceneNode;
 
 public interface GameEngineListener {
 	

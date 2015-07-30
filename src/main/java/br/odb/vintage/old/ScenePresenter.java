@@ -1,12 +1,19 @@
-package br.odb.vintage;
+package br.odb.vintage.old;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
+import br.odb.libscene.CameraNode;
 import br.odb.utils.Utils;
+import br.odb.vintage.SceneRenderer;
 
 public class ScenePresenter {
+
+	SceneRenderer renderer;
+	List< CameraNode > cameras = new ArrayList<>();
 
 //    final public Map<LightSource, GroupSector> lightsForPlace = new HashMap<LightSource, GroupSector>();
 //    LightSource light0 = new LightSource(new Vec3(), 128);
@@ -41,8 +48,6 @@ public class ScenePresenter {
 //        actor.angleXZ = angleXZ;
 //        renderer.actors.add( actor );
 //    }
-
-    SceneRenderer renderer;
 
     public ScenePresenter(SceneRenderer renderer ) {
         this.renderer = renderer;

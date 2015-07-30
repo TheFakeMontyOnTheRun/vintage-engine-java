@@ -1,44 +1,33 @@
-///**
-// * 
-// */
-package br.odb.vintage;
-//
-//import java.io.FileNotFoundException;
-//import java.io.IOException;
-//import java.util.ArrayList;
-//
-//import br.odb.gameapp.GameAudioManager;
-//import br.odb.World.Actor;
-//import br.odb.libscene.ActorSceneNode;
-//import br.odb.libscene.ActorConstants;
-//import br.odb.libscene.GroupSector;
-//import br.odb.libscene.Sector;
-//import br.odb.libscene.World;
-//import br.odb.utils.FileServerDelegate;
-//
-///**
-// * @author monty
-// * 
-// * 
-// * Concerns:
-// * - Manages Sectors and Players in those sectors
-// * - Game events management
-// */
+package br.odb.vintage.old;
+
+import br.odb.vintage.GameSession;
+import br.odb.vintage.MultiplayerAgent;
+
+/**
+ * @author monty
+ * 
+ * 
+ * Concerns:
+ * - Takes a session and presents it properly, controlling time flow
+ */
 public class GameEngine implements Runnable {
-//
-//	private World world;
-//	private int timeStep;
-//	private GameEngineListener listener;
-//	private GameDelegate delegate;
+
+	GameSession currentGameSession;
+	ScenePresenter presenter;
+	MultiplayerAgent multiplayer;
+	
+	//control elements - might be extracted into separate element
+	long timeStep;
+	boolean running = true;
+	boolean loaded = false;
+	boolean updating;
+
+	//	/**
+//	 * 
+//	 */
 //	/**
 //	 * 
 //	 */
-//	private volatile boolean running = true;
-//	private boolean updating;
-//	/**
-//	 * 
-//	 */
-//	public static boolean loaded = false;
 //
 //	/**
 //	 * 
@@ -48,7 +37,7 @@ public class GameEngine implements Runnable {
 //		this.world = world;
 //		this.listener = listener;
 //	}
-//
+
 //	// ------------------------------------------------------------------------------------------------------------
 //	/**
 //	 * 
@@ -61,11 +50,6 @@ public class GameEngine implements Runnable {
 //		actor.moveTo(sector.getCenter());
 //		actor.setCurrentSector(sectorId);
 //		sector.onSectorEnteredBy(actor);
-//	}
-//
-//	public void setTimeStep(int timeStep) {
-//
-//		this.timeStep = timeStep;
 //	}
 //
 //	// ------------------------------------------------------------------------------------------------------------
@@ -217,8 +201,8 @@ public class GameEngine implements Runnable {
 //			
 //		}
 	}
-//
-//	
+
+	
 //	//this would belong to World, wasn't for the dynamics of collision between entities
 //	private void findBestFitForActorFromSector( ActorSceneNode actor,
 //			GroupSector originalSector) {
@@ -285,20 +269,20 @@ public class GameEngine implements Runnable {
 //			}
 //		}
 //	}
-//
+
 	public void stop() {
-//		this.running = false;
-//		loaded = false;
+		this.running = false;
+		loaded = false;
 	}
-//	
-//	public void pause() {
-//		loaded = false;
-//	}
-//	
-//	public void resume() {
-//		loaded = true;
-//	}
-//
+	
+	public void pause() {
+		loaded = false;
+	}
+	
+	public void resume() {
+		loaded = true;
+	}
+
 	public void setDelegate(GameDelegate delegate) {
 //
 //		this.delegate = delegate;
@@ -323,11 +307,12 @@ public class GameEngine implements Runnable {
 //		
 //		listener.requestMapChange(mapName);
 //	}
-//
-//	public void start() {
-//		running = true;
-//	}
-//
+
+	public void start() {
+		running = true;
+	}
+
+//This would be a separate presenter?
 //	public void showStory(int index ) {
 //		
 //		listener.showHistory( index );
@@ -346,11 +331,11 @@ public class GameEngine implements Runnable {
 //		}
 //		world.destroy();
 	}
-//
+
 //	public void restoreState( FileServerDelegate delegate ) throws FileNotFoundException, IOException {
 //		world.loadSnapshotAt( delegate.openAsInputStream( "state" ) );		
 //	}
-//
+
 //	public World getWorld() {
 //
 //		return world;

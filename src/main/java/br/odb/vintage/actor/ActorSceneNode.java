@@ -1,11 +1,11 @@
-package br.odb.vintage;
+package br.odb.vintage.actor;
 
 import br.odb.libscene.SceneNode;
 
 /**
  * Created by monty on 6/28/15.
  */
-public class SceneActorNode extends SceneNode {
+public class ActorSceneNode extends SceneNode {
     /**
 	 * 
 	 */
@@ -14,11 +14,11 @@ public class SceneActorNode extends SceneNode {
 	ActorState currentState;
 	public float angleXZ;
 
-    public SceneActorNode(String id) {
+    public ActorSceneNode(String id) {
         super(id);
     }
 
-    public SceneActorNode(SceneNode other) {
+    public ActorSceneNode(SceneNode other) {
         super(other);
     }
 }
