@@ -1,4 +1,4 @@
-package br.odb.vintage.old;
+package br.odb.vintage;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -6,14 +6,20 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import br.odb.liboldfart.WavefrontMaterialLoader;
+import br.odb.liboldfart.WavefrontOBJLoader;
 import br.odb.libscene.CameraNode;
+import br.odb.libscene.World;
+import br.odb.libstrip.GeneralTriangleMesh;
+import br.odb.libstrip.Material;
+import br.odb.libstrip.builders.GeneralTriangleFactory;
+import br.odb.utils.FileServerDelegate;
 import br.odb.utils.Utils;
-import br.odb.vintage.SceneRenderer;
 
 public class ScenePresenter {
 
-	SceneRenderer renderer;
-	List< CameraNode > cameras = new ArrayList<>();
+	public final SceneRenderer renderer;
+	public final List< CameraNode > cameras = new ArrayList<>();
 
 //    final public Map<LightSource, GroupSector> lightsForPlace = new HashMap<LightSource, GroupSector>();
 //    LightSource light0 = new LightSource(new Vec3(), 128);
@@ -51,14 +57,14 @@ public class ScenePresenter {
 
     public ScenePresenter(SceneRenderer renderer ) {
         this.renderer = renderer;
-    }
+    }  
+    
 
     public void init(InputStream vertex, InputStream fragment) {
 
     	try {
             String vertexShader =  Utils.readFully(vertex, "utf8");
             String fragmentShader = Utils.readFully(fragment, "utf8");
-            initDefaultMeshForActor();
         } catch (FileNotFoundException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -68,19 +74,17 @@ public class ScenePresenter {
         }
     }
 
-    private void initDefaultMeshForActor() throws IOException {
-//        GeneralTriangleMesh enemy;
-//        WavefrontMaterialLoader matLoader = new WavefrontMaterialLoader();
-//        List<Material> mats = matLoader.parseMaterials( context.getAssets().open( "gargoyle.mtl" ) );
-//
-//        WavefrontOBJLoader loader = new WavefrontOBJLoader( new GLES1TriangleFactory() );
-//        ArrayList<GeneralTriangleMesh> mesh = (ArrayList<GeneralTriangleMesh>) loader.loadMeshes( context.getAssets().open("gargoyle.obj"), mats );
-//
-//        enemy = mesh.get( 0 );
-//
-//        for ( GeneralTriangle gt : enemy.faces ) {
-//            renderer.sampleEnemy.faces.add(GLES1TriangleFactory.getInstance().makeTrigFrom(gt));
-//        }
+    public void initDefaultMeshForActor( FileServerDelegate fileServer ) throws IOException {
+        GeneralTriangleMesh enemy;
+        WavefrontMaterialLoader matLoader = new WavefrontMaterialLoader();
+        List<Material> mats = matLoader.parseMaterials( fileServer.openAsset("gargoyle.mtl" ) );
+
+        WavefrontOBJLoader loader = new WavefrontOBJLoader( new GeneralTriangleFactory() );
+        ArrayList<GeneralTriangleMesh> mesh = (ArrayList<GeneralTriangleMesh>) loader.loadMeshes(  fileServer.openAsset("gargoyle.obj"), mats );
+
+        enemy = mesh.get( 0 );
+
+        renderer.setDefaultMeshForActor( enemy );
     }
 
     public void onLeft() {
@@ -113,10 +117,9 @@ public class ScenePresenter {
 //            }
 //        }
 //    }
-//
-//    public void setScene(World scene) {
-//        loadGeometryFromScene(scene.masterSector);
-//        renderer.flush();
-//    }
+
+    public void setScene(World scene) {
+    	renderer.setScene(scene);
+    }
 }
 

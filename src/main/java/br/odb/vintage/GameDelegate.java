@@ -1,7 +1,7 @@
 /**
  * 
  */
-package br.odb.vintage.old;
+package br.odb.vintage;
 
 import br.odb.libscene.SpaceRegion;
 import br.odb.vintage.actor.ActorAction;

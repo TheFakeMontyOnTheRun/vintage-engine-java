@@ -1,4 +1,4 @@
-package br.odb.vintage.componentmodel;
+package br.odb.vintage.actor;
 
 public class ComponentContainer {
 
