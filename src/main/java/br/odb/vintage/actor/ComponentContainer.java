@@ -1,7 +1,9 @@
-package br.odb.vintage.componentmodel;
+package br.odb.vintage.actor;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import br.odb.vintage.componentmodel.GameEntity;
 
 public class ComponentContainer {
 

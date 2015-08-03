@@ -16,6 +16,7 @@ public class GameSession implements Serializable {
 	public long timeStamp;
 	
 	public GameSession( World scene, Play gameplay ) {
+		timeStamp = 0;
 		this.scene = scene;
 		this.gameplay = gameplay;
 	}

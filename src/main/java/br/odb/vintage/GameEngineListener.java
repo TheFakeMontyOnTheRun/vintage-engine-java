@@ -1,4 +1,4 @@
-package br.odb.vintage.old;
+package br.odb.vintage;
 
 import br.odb.utils.FileServerDelegate;
 import br.odb.vintage.actor.ActorSceneNode;
