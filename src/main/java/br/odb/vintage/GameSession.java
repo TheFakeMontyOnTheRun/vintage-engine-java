@@ -10,7 +10,17 @@ public class GameSession implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1848774213296625524L;
-	Play gameplay;
-	World scene;
-	long timeStamp;
+	
+	public final Play gameplay;
+	public final World scene;
+	public long timeStamp;
+	
+	public GameSession( World scene, Play gameplay ) {
+		this.scene = scene;
+		this.gameplay = gameplay;
+	}
+	
+	public void tick( long delta ) {
+		timeStamp += delta;
+	}
 }

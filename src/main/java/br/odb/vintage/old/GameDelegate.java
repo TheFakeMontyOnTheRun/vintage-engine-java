@@ -11,6 +11,7 @@ import br.odb.vintage.actor.ActorSceneNode;
  * @author monty
  *
  */
+//should this become EntityActuator?
 public interface GameDelegate {
 	void onMapChange( String oldMapName, String newMapName );
 	void update();

@@ -7,5 +7,9 @@ import br.odb.vintage.actor.ActorState;
 
 public class AnimatedMeshComponent extends Component {
 
+	public AnimatedMeshComponent(String name) {
+		super(name);
+	}
+
 	public final HashMap< ActorState, MeshSequence > frames = new HashMap<>();
 }

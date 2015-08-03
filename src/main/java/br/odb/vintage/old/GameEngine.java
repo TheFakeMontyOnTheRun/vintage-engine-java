@@ -22,37 +22,20 @@ public class GameEngine implements Runnable {
 	boolean loaded = false;
 	boolean updating;
 
-	//	/**
-//	 * 
-//	 */
-//	/**
-//	 * 
-//	 */
-//
-//	/**
-//	 * 
-//	 */
-//	public GameEngine(World world, GameEngineListener listener) {
-//
-//		this.world = world;
-//		this.listener = listener;
-//	}
+	public void startNewSession( String sessionName, String sceneName, String playName ) {
+		
+	}
+	
+	public void startNewMultiplayerConnection() {
+		
+	}
+	
+	public void setPresenter( ScenePresenter newPresenter ) {
+		this.presenter = newPresenter;
+	}
 
-//	// ------------------------------------------------------------------------------------------------------------
-//	/**
-//	 * 
-//	 * @param actor
-//	 * @param sectorId
-//	 */
-//	public void placeActor( ActorSceneNode actor, int sectorId) {
-//
-//		GroupSector sector = (GroupSector) world.masterSector.getChild(sectorId);
-//		actor.moveTo(sector.getCenter());
-//		actor.setCurrentSector(sectorId);
-//		sector.onSectorEnteredBy(actor);
-//	}
-//
-//	// ------------------------------------------------------------------------------------------------------------
+//Not here.	
+//// ------------------------------------------------------------------------------------------------------------
 //	private void doGravity( ActorSceneNode actor) {
 //		GroupSector sector = (GroupSector) world.getSector(actor
 //				.getCurrentSector());
@@ -85,13 +68,13 @@ public class GameEngine implements Runnable {
 //
 //	}
 //
-//	// ------------------------------------------------------------------------------------------------------------
-//	/**
-//		 * 
-//		 */
+	// ------------------------------------------------------------------------------------------------------------
+	/**
+		 * 
+		 */
 	@Override
 	public void run() {
-//
+//Not fully here.
 //		ArrayList< ActorSceneNode> toBeAdded = new ArrayList< ActorSceneNode>();
 //		ActorSceneNode sons;
 //		boolean actorHasChangedSector;
@@ -101,14 +84,14 @@ public class GameEngine implements Runnable {
 //
 //		actorHasChangedSector = true;
 //
-//		while (running && loaded ) {
-//			
-//			updating = true;
+		while (running && loaded ) {
+			
+			updating = true;
 //			needsToRefreshLightning = false;
-//			
-//			try {
-//
-//				Thread.sleep(timeStep);
+			
+			try {
+
+				Thread.sleep(timeStep);
 //
 //				world.checkpointActors();
 //				
@@ -182,13 +165,13 @@ public class GameEngine implements Runnable {
 //				
 //				actorHasChangedSector = false;
 //
-//			} catch (Exception e) {
-//
-//			}
-//			
-//			updating = false;
-//		}
-//		
+			} catch (Exception e) {
+				//TODO: handle this properly
+			}
+			
+			updating = false;
+		}
+		
 //		if ( world != null ) {
 //			
 //			for ( ActorSceneNode toBeKilled : world.getActorList() ) {
@@ -302,22 +285,11 @@ public class GameEngine implements Runnable {
 //			}
 //		}
 	}
-//
-//	public void requestMapChange(String mapName) {
-//		
-//		listener.requestMapChange(mapName);
-//	}
 
 	public void start() {
 		running = true;
 	}
 
-//This would be a separate presenter?
-//	public void showStory(int index ) {
-//		
-//		listener.showHistory( index );
-//	}
-//
 	public void destroy() {
 //		
 //		while ( updating ) {
@@ -336,26 +308,7 @@ public class GameEngine implements Runnable {
 //		world.loadSnapshotAt( delegate.openAsInputStream( "state" ) );		
 //	}
 
-//	public World getWorld() {
-//
-//		return world;
-//	}
-//
-//	public GameEngineListener getListener() {
-//
-//		return listener;
-//	}
-//
 //	public void showInformation(String information ) {
 //		listener.needsToDisplayMessage( information );		
-//	}
-//
-//	public void needRefreshVisibity() {
-//		
-//		listener.needsToRefreshWindow( false );
-//	}
-//
-//	public void showScreen( String screenClass ) {
-//		listener.showScreen( screenClass );		
 //	}
 }
