@@ -1,9 +1,9 @@
 package br.odb.vintage;
 
-import br.odb.libstrip.GeneralTriangleMesh;
+import br.odb.libstrip.TriangleMesh;
 
 public class MeshSequence {
-	private GeneralTriangleMesh[] sequence;
+	private TriangleMesh[] sequence;
 	private int currentFrame;
 	
 	void advanceFrame() {
@@ -18,7 +18,7 @@ public class MeshSequence {
 		}
 	}
 	
-	GeneralTriangleMesh getCurrentFrame() {
+	TriangleMesh getCurrentFrame() {
 		return sequence[ currentFrame ];
 	}
 }

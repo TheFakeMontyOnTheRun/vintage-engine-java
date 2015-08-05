@@ -10,7 +10,7 @@ import br.odb.liboldfart.WavefrontMaterialLoader;
 import br.odb.liboldfart.WavefrontOBJLoader;
 import br.odb.libscene.CameraNode;
 import br.odb.libscene.World;
-import br.odb.libstrip.GeneralTriangleMesh;
+import br.odb.libstrip.TriangleMesh;
 import br.odb.libstrip.Material;
 import br.odb.libstrip.builders.GeneralTriangleFactory;
 import br.odb.utils.FileServerDelegate;
@@ -75,12 +75,12 @@ public class ScenePresenter {
     }
 
     public void initDefaultMeshForActor( FileServerDelegate fileServer ) throws IOException {
-        GeneralTriangleMesh enemy;
+        TriangleMesh enemy;
         WavefrontMaterialLoader matLoader = new WavefrontMaterialLoader();
         List<Material> mats = matLoader.parseMaterials( fileServer.openAsset("gargoyle.mtl" ) );
 
         WavefrontOBJLoader loader = new WavefrontOBJLoader( new GeneralTriangleFactory() );
-        ArrayList<GeneralTriangleMesh> mesh = (ArrayList<GeneralTriangleMesh>) loader.loadMeshes(  fileServer.openAsset("gargoyle.obj"), mats );
+        ArrayList<TriangleMesh> mesh = (ArrayList<TriangleMesh>) loader.loadMeshes(  fileServer.openAsset("gargoyle.obj"), mats );
 
         enemy = mesh.get( 0 );
 
