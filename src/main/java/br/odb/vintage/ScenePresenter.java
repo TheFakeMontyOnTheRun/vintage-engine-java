@@ -9,7 +9,12 @@ import java.util.List;
 import br.odb.liboldfart.WavefrontMaterialLoader;
 import br.odb.liboldfart.WavefrontOBJLoader;
 import br.odb.libscene.CameraNode;
+import br.odb.libscene.GroupSector;
+import br.odb.libscene.LightNode;
+import br.odb.libscene.MeshNode;
+import br.odb.libscene.SceneNode;
 import br.odb.libscene.World;
+import br.odb.libstrip.GeneralTriangle;
 import br.odb.libstrip.TriangleMesh;
 import br.odb.libstrip.Material;
 import br.odb.libstrip.builders.GeneralTriangleFactory;
@@ -101,25 +106,25 @@ public class ScenePresenter {
         renderer.getCurrentCameraNode().localPosition.z -= 10 * Math.cos(renderer.getCurrentCameraNode().angleXZ
                 * (Math.PI / 180.0f));
     }
-//
-//    private void loadGeometryFromScene(GroupSector sector) {
-//
-//        for (GeneralTriangle isf : sector.mesh.faces) {
-//            ++polyCount;
-//            renderer.changeHue((GLES1Triangle) isf);
-//            isf.flush();
-//            renderer.addToVA((GLES1Triangle) isf);
-//        }
-//
-//        for (SceneNode sr : sector.getSons()) {
-//            if (sr instanceof GroupSector) {
-//                loadGeometryFromScene((GroupSector) sr);
-//            }
-//        }
-//    }
+
+	public void loadGeometryFromScene(GroupSector sector) {
+
+		for (SceneNode sr : sector.getSons()) {
+			if ( sr instanceof MeshNode ) {
+				for (GeneralTriangle isf : ((MeshNode)sr).mesh.faces) {
+					renderer.addTriangleToStaticScene(isf);
+				}				
+			} else if (sr instanceof GroupSector) {
+				loadGeometryFromScene((GroupSector) sr);
+			} else if (sr instanceof LightNode) {
+				renderer.addLight((LightNode) sr);
+			}
+		}
+	}
 
     public void setScene(World scene) {
-    	renderer.setScene(scene);
+    	loadGeometryFromScene( scene.masterSector );
+    	renderer.flush();
     }
 }
 
