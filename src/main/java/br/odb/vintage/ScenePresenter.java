@@ -20,6 +20,8 @@ import br.odb.libstrip.Material;
 import br.odb.libstrip.builders.GeneralTriangleFactory;
 import br.odb.utils.FileServerDelegate;
 import br.odb.utils.Utils;
+import br.odb.utils.math.Vec3;
+import br.odb.vintage.actor.ActorSceneNode;
 
 public class ScenePresenter {
 
@@ -53,12 +55,12 @@ public class ScenePresenter {
 //        }
 //    }
 
-//    public void spawnActor(Vec3 v, float angleXZ) {
-//        SceneActorNode actor = new SceneActorNode( "actor@" + v.toString() );
-//        actor.localPosition.set( v );
-//        actor.angleXZ = angleXZ;
-//        renderer.actors.add( actor );
-//    }
+    public void spawnActor(Vec3 v, float angleXZ) {
+        ActorSceneNode actor = new ActorSceneNode( "actor@" + v.toString() );
+        actor.localPosition.set( v );
+        actor.angleXZ = angleXZ;
+        renderer.addActor( actor );
+    }
 
     public ScenePresenter(SceneRenderer renderer ) {
         this.renderer = renderer;
