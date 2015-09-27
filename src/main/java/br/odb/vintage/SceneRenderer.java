@@ -13,6 +13,7 @@ public interface SceneRenderer {
 	void setDefaultMeshForActor(TriangleMesh enemy);
 	void setAsReady();
 	void flush();
+	void clearActors();
 	void addActor( ActorSceneNode node );
 	void addTriangleToStaticScene(GeneralTriangle gt);
 	void addLight(LightNode ln);

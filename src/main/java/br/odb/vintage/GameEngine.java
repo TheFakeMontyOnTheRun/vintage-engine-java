@@ -7,6 +7,8 @@ import br.odb.libscene.SceneNode;
 import br.odb.libscene.Sector;
 import br.odb.libscene.World;
 import br.odb.utils.math.Vec3;
+import br.odb.vintage.MultiplayerAgent.MultiplayerClient;
+import br.odb.vintage.actor.ActorSceneNode;
 
 /**
  * @author monty
@@ -15,17 +17,23 @@ import br.odb.utils.math.Vec3;
  *         Concerns: - Takes a session and presents it properly, controlling
  *         time flow
  */
-public class GameEngine implements Runnable {
+public class GameEngine implements Runnable, MultiplayerClient {
 
 	GameSession currentGameSession;
 	ScenePresenter presenter;
-	MultiplayerAgent multiplayer;
+	MultiplayerAgent multiplayerAgent;
 
 	// control elements - might be extracted into separate element
 	long timeStep = 50;
 	boolean running = true;
 	boolean loaded = false;
 	boolean updating;
+	
+	public GameEngine( boolean multiplayerEnabled ) {
+		if ( multiplayerEnabled ) {
+			multiplayerAgent = new MultiplayerAgent( 3 );
+		}	
+	}
 
 	public void makeNewSessionFor(Play play, World scene,
 			ScenePresenter presenter) {
@@ -33,6 +41,22 @@ public class GameEngine implements Runnable {
 		presenter.setScene(scene);
 		this.presenter = presenter;
 		loaded = true;
+	}
+	
+	public void gameTick(ScenePresenter presenter) {
+		
+		if ( multiplayerAgent != null ) {	
+			synchronized( multiplayerAgent.actors ) {
+				
+				presenter.renderer.clearActors();
+				
+				multiplayerAgent.localPlayer = presenter.renderer.getCurrentCameraNode();
+				
+				for ( ActorSceneNode node: multiplayerAgent.actors ) {
+					presenter.renderer.addActor( node );			
+				}				
+			}
+		}
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -49,6 +73,12 @@ public class GameEngine implements Runnable {
 		boolean inside;
 		
 		running = true;
+		loaded = true;
+		
+		if ( multiplayerAgent != null ) {
+			multiplayerAgent.startNetGame();
+			new Thread( multiplayerAgent ).start();
+		}
 		
 		while (running && loaded) {
 
@@ -59,6 +89,8 @@ public class GameEngine implements Runnable {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
+			gameTick( presenter );
 
 			inside = false;
 			
@@ -273,7 +305,13 @@ public class GameEngine implements Runnable {
 		loaded = true;
 	}
 
-	public void start() {
+	public void start() {		
 		running = true;
+	}
+
+	@Override
+	public void onDataReceived() {
+		// TODO Auto-generated method stub
+		
 	}
 }
