@@ -23,25 +23,29 @@ import br.odb.vintage.dto.PlayerStateDTO;
  * Created by monty on 7/28/15.
  */
 public class MultiplayerAgent implements Runnable {
-	public static final String HOST = "localhost";
-	public static final String SERVER = "http://" + HOST + ":8080/multiplayer-server";
 	final int gameType;
 	volatile GameIdDTO gameId;
 	public ActorSceneNode playerNode;
 	public CameraNode localPlayer;
 	List< ActorSceneNode > actors = new ArrayList<>();
+	private String serverURL;
 	
+	
+	public String getServerBaseURL() {
+		return "http://" + serverURL + ":8080/multiplayer-server";
+	}
 	
 	public interface MultiplayerClient {
 		void onDataReceived();
 	}
 	
-	MultiplayerAgent( int gameType ) {
+	MultiplayerAgent( int gameType, String serverURL ) {
 		this.gameType = gameType;
+		this.serverURL = serverURL;
 	}
 	
 	synchronized void getGameStatus() {
-		FPSGameStatusDTO state = (FPSGameStatusDTO) blockSendHTTPGet(SERVER + "/GetGameStatus?gameId=" + gameId.gameId);
+		FPSGameStatusDTO state = (FPSGameStatusDTO) blockSendHTTPGet(getServerBaseURL() + "/GetGameStatus?gameId=" + gameId.gameId);
 
 		if ( state == null ) {
 			return;
@@ -93,7 +97,7 @@ public class MultiplayerAgent implements Runnable {
 		
 		//System.out.println( "sending data about id = " + id + " -> " + query );
 
-		blockSendHTTPGet(SERVER + "/SendMove?" + query);
+		blockSendHTTPGet(getServerBaseURL() + "/SendMove?" + query);
 	}
 
 	Serializable blockSendHTTPGet(final String url) {
@@ -153,7 +157,7 @@ public class MultiplayerAgent implements Runnable {
 	}
 
 	void startNetGame() {
-		gameId = (GameIdDTO) blockSendHTTPGet( SERVER + "/GetJavaGameId?gameType=" + gameType );
+		gameId = (GameIdDTO) blockSendHTTPGet( getServerBaseURL() + "/GetJavaGameId?gameType=" + gameType );
 		
 		System.out.println( "game id: " + gameId.gameId + "; player id: " + gameId.playerId );
 	}

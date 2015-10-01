@@ -29,9 +29,9 @@ public class GameEngine implements Runnable, MultiplayerClient {
 	boolean loaded = false;
 	boolean updating;
 	
-	public GameEngine( boolean multiplayerEnabled ) {
-		if ( multiplayerEnabled ) {
-			multiplayerAgent = new MultiplayerAgent( 3 );
+	public GameEngine( String serverURL ) {
+		if ( serverURL != null ) {
+			multiplayerAgent = new MultiplayerAgent( 3, serverURL );
 		}	
 	}
 
