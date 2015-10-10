@@ -3,6 +3,7 @@ package br.odb.vintage;
 import java.util.List;
 
 import br.odb.gameworld.Play;
+import br.odb.libscene.CameraNode;
 import br.odb.libscene.SceneNode;
 import br.odb.libscene.Sector;
 import br.odb.libscene.World;
@@ -57,6 +58,8 @@ public class GameEngine implements Runnable, MultiplayerClient {
 				}				
 			}
 		}
+		
+		presenter.renderer.update( timeStep );
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -91,7 +94,7 @@ public class GameEngine implements Runnable, MultiplayerClient {
 			}
 			
 			gameTick( presenter );
-
+			
 			inside = false;
 			
 			for ( SceneNode sn : srs ) {
@@ -291,6 +294,39 @@ public class GameEngine implements Runnable, MultiplayerClient {
 	// }
 	// }
 	// }
+
+	public static ActorSceneNode checkForPointedElements( CameraNode camera,  List<ActorSceneNode> actors, World world ) {
+		
+		Vec3 targetPosition;
+		Vec3 cameraPosition;
+		Vec3 cameraDirection;
+		Vec3 expectedDirectionVector;
+		float projectionLength;
+		float angle;
+		
+		angle = camera.angleXZ;
+		
+		cameraPosition = camera.getAbsolutePosition();
+		cameraDirection = new Vec3( (float)Math.sin(angle * (Math.PI / 180.0f) ), 0.0f, (float) Math.cos(angle * (Math.PI / 180.0f) ) ).normalized();
+
+		expectedDirectionVector = new Vec3( 0.0f, 0.0f, 1.0f );
+		
+		synchronized( actors ) {	
+			for ( ActorSceneNode actor : actors ) {
+				synchronized( actor ) {
+					targetPosition = actor.getAbsolutePosition();
+					
+					expectedDirectionVector = targetPosition.sub( cameraPosition ).normalized();
+					projectionLength = cameraDirection.dotProduct( expectedDirectionVector );
+					
+					if ( projectionLength  >= -1.1f && projectionLength <= -0.9f ) {
+						return actor;
+					}
+				}
+			}
+		}		
+		return null;
+	}
 
 	public void stop() {
 		this.running = false;

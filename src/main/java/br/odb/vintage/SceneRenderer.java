@@ -17,4 +17,5 @@ public interface SceneRenderer {
 	void addActor( ActorSceneNode node );
 	void addTriangleToStaticScene(GeneralTriangle gt);
 	void addLight(LightNode ln);
+	void update(long timeStep);
 }
