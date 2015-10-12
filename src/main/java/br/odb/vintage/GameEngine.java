@@ -29,11 +29,11 @@ public class GameEngine implements Runnable, MultiplayerClient {
 	boolean running = true;
 	boolean loaded = false;
 	boolean updating;
-	
-	public GameEngine( String serverURL ) {
-		if ( serverURL != null ) {
-			multiplayerAgent = new MultiplayerAgent( 3, serverURL );
-		}	
+
+	public GameEngine(String serverURL) {
+		if (serverURL != null) {
+			multiplayerAgent = new MultiplayerAgent(3, serverURL);
+		}
 	}
 
 	public void makeNewSessionFor(Play play, World scene,
@@ -43,23 +43,24 @@ public class GameEngine implements Runnable, MultiplayerClient {
 		this.presenter = presenter;
 		loaded = true;
 	}
-	
+
 	public void gameTick(ScenePresenter presenter) {
-		
-		if ( multiplayerAgent != null ) {	
-			synchronized( multiplayerAgent.actors ) {
-				
+
+		if (multiplayerAgent != null) {
+			synchronized (multiplayerAgent.actors) {
+
 				presenter.renderer.clearActors();
-				
-				multiplayerAgent.localPlayer = presenter.renderer.getCurrentCameraNode();
-				
-				for ( ActorSceneNode node: multiplayerAgent.actors ) {
-					presenter.renderer.addActor( node );			
-				}				
+
+				multiplayerAgent.localPlayer = presenter.renderer
+						.getCurrentCameraNode();
+
+				for (ActorSceneNode node : multiplayerAgent.actors) {
+					presenter.renderer.addActor(node);
+				}
 			}
 		}
-		
-		presenter.renderer.update( timeStep );
+
+		presenter.renderer.update(timeStep);
 	}
 
 	// ------------------------------------------------------------------------------------------------------------
@@ -68,21 +69,21 @@ public class GameEngine implements Runnable, MultiplayerClient {
 	// */
 	@Override
 	public void run() {
-		
+
 		final List<SceneNode> srs = currentGameSession.scene
 				.getAllRegionsAsList();
-		
+
 		Vec3 lastValidPosition = new Vec3();
 		boolean inside;
-		
+
 		running = true;
 		loaded = true;
-		
-		if ( multiplayerAgent != null ) {
+
+		if (multiplayerAgent != null) {
 			multiplayerAgent.startNetGame();
-			new Thread( multiplayerAgent ).start();
+			new Thread(multiplayerAgent).start();
 		}
-		
+
 		while (running && loaded) {
 
 			updating = true;
@@ -92,13 +93,13 @@ public class GameEngine implements Runnable, MultiplayerClient {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
-			gameTick( presenter );
-			
+
+			gameTick(presenter);
+
 			inside = false;
-			
-			for ( SceneNode sn : srs ) {
-				
+
+			for (SceneNode sn : srs) {
+
 				if (sn instanceof Sector) {
 					if (((Sector) sn).isInside(presenter.renderer
 							.getCurrentCameraNode().localPosition)) {
@@ -109,7 +110,6 @@ public class GameEngine implements Runnable, MultiplayerClient {
 					}
 				}
 			}
-
 
 			if (!inside) {
 				presenter.renderer.getCurrentCameraNode().localPosition
@@ -295,36 +295,53 @@ public class GameEngine implements Runnable, MultiplayerClient {
 	// }
 	// }
 
-	public static ActorSceneNode checkForPointedElements( CameraNode camera,  List<ActorSceneNode> actors, World world ) {
-		
+	public static ActorSceneNode checkForPointedElements(CameraNode camera,
+			List<ActorSceneNode> actors, World world) {
+
 		Vec3 targetPosition;
 		Vec3 cameraPosition;
 		Vec3 cameraDirection;
 		Vec3 expectedDirectionVector;
 		float projectionLength;
 		float angle;
-		
-		angle = camera.angleXZ;
-		
-		cameraPosition = camera.getAbsolutePosition();
-		cameraDirection = new Vec3( (float)Math.sin(angle * (Math.PI / 180.0f) ), 0.0f, (float) Math.cos(angle * (Math.PI / 180.0f) ) ).normalized();
 
-		expectedDirectionVector = new Vec3( 0.0f, 0.0f, 1.0f );
-		
-		synchronized( actors ) {	
-			for ( ActorSceneNode actor : actors ) {
-				synchronized( actor ) {
-					targetPosition = actor.getAbsolutePosition();
-					
-					expectedDirectionVector = targetPosition.sub( cameraPosition ).normalized();
-					projectionLength = cameraDirection.dotProduct( expectedDirectionVector );
-					
-					if ( projectionLength  >= -1.1f && projectionLength <= -0.9f ) {
+		angle = camera.angleXZ;
+
+		cameraPosition = camera.getAbsolutePosition();
+		cameraDirection = new Vec3(
+				(float) Math.sin(angle * (Math.PI / 180.0f)), 0.0f,
+				(float) Math.cos(angle * (Math.PI / 180.0f))).normalized();
+
+		expectedDirectionVector = new Vec3(0.0f, 0.0f, 1.0f);
+
+		// synchronized( actors ) {
+		// for ( ActorSceneNode actor : actors ) {
+		// synchronized( actor ) {
+		// targetPosition = actor.getAbsolutePosition();
+		//
+		// expectedDirectionVector = targetPosition.sub( cameraPosition
+		// ).normalized();
+		// projectionLength = cameraDirection.dotProduct(
+		// expectedDirectionVector );
+		//
+		// if ( projectionLength >= -1.1f && projectionLength <= -0.9f ) {
+		// return actor;
+		// }
+		// }
+		// }
+		// }
+		SceneNode result = world.rayTrace(cameraPosition, cameraDirection );
+
+		synchronized (actors) {
+			for (ActorSceneNode actor : actors) {
+				synchronized (actor) {
+					if (actor == result) {
 						return actor;
 					}
 				}
 			}
-		}		
+		}
+
 		return null;
 	}
 
@@ -341,13 +358,13 @@ public class GameEngine implements Runnable, MultiplayerClient {
 		loaded = true;
 	}
 
-	public void start() {		
+	public void start() {
 		running = true;
 	}
 
 	@Override
 	public void onDataReceived() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

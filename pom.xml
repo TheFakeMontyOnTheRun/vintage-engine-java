@@ -15,7 +15,7 @@
       <scope>test</scope>
     </dependency>
     
-        <dependency>
+    <dependency>
       <groupId>br.odb</groupId>
       <artifactId>gameutils</artifactId>
       <version>1.0-SNAPSHOT</version>
